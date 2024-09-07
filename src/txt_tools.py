@@ -1,9 +1,10 @@
 import re
 from nltk import sent_tokenize, word_tokenize
 import json
+import os
 
 
-def split_text_into_paragraphs(filepath: str, output_filepath:str) -> list:
+def split_text_to_paragraphs(filepath: str) -> list:
     """
     Splits the text from a file into paragraphs, using double newlines as the delimiter and outputs to json file.
     
@@ -12,6 +13,8 @@ def split_text_into_paragraphs(filepath: str, output_filepath:str) -> list:
     """
     with open(filepath, 'r', encoding='utf-8') as file:
         text = file.read()
+
+    output_filepath = os.path.splitext(filepath)[0] + ".json"
 
     paragraphs = []
     buffer = []
@@ -37,9 +40,10 @@ def split_text_into_paragraphs(filepath: str, output_filepath:str) -> list:
 
     with open(output_filepath, 'w', encoding='utf-8') as json_file:
         json.dump(paragraphs, json_file, ensure_ascii=False, indent=4)
+    
 
 
-def save_sentences_to_json(filepath: str, json_output: str):
+def split_text_to_sentences(filepath: str):
     """
     Splits text into sentences using NLTK's sent_tokenize. Outputs to a new json file.
 
@@ -49,9 +53,17 @@ def save_sentences_to_json(filepath: str, json_output: str):
     with open(filepath, 'r', encoding='utf-8') as f:
         text = f.read()
     
+    output_filepath = os.path.splitext(filepath)[0] + ".json"
+
     # Tokenize text into sentences
     sentences = sent_tokenize(text)
 
     # Save the sentences into a JSON file
-    with open(json_output, 'w', encoding='utf-8') as json_file:
+    with open(output_filepath, 'w', encoding='utf-8') as json_file:
         json.dump(sentences, json_file, ensure_ascii=False, indent=4)
+
+    return output_filepath
+
+
+
+split_text_to_sentences("data/pdfs/poweron-cd-renew.md")

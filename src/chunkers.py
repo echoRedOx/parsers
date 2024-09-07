@@ -41,3 +41,11 @@ def chunk_text(filepath: str, max_chunk_size: int, overlap_size: int, output_pat
         json.dump(chunks, json_file, indent=4)
 
     print(f"Saved chunks to {output_path}")
+
+
+def json_to_chunks(filepath):
+    with open(filepath, 'r') as f:
+        data = json.load(f)
+    
+    print(data)
+
