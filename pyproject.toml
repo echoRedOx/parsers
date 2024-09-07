@@ -12,3 +12,6 @@ dependencies = [
 
 [tool.setuptools.packages]
 find = {}
+
+[project.scripts]
+pdf_to_json = "src.main:pdf_to_json"
