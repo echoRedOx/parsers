@@ -32,6 +32,3 @@ def extract_pdf_to_md(input_filepath: str) -> str:
     pathlib.Path(output_filepath).write_bytes(md_text.encode())
     
     return output_filepath
-
-# extract_pdf_to_txt("data/pdfs/poweron-cd-renew.pdf")
-extract_pdf_to_md("data/pdfs/poweron-cd-renew.pdf")

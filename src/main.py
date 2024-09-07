@@ -1,11 +1,11 @@
-from pdf_tools import extract_pdf_to_md
-from txt_tools import split_text_to_sentences
+from src.pdf_tools import extract_pdf_to_md
+from src.txt_tools import split_text_to_sentences
 import sys
 
 
 def pdf_to_json():
     """
-    Imports extraction and sentence parser form included modules. CLI entry point "pdf_to_json"
+    Imports extraction and sentence parser form included modules. CLI entry point "pdf_to_json path/to/your/file.pdf"
     """
     filepath = sys.argv[1]
     md_filepath = extract_pdf_to_md(filepath)
@@ -14,9 +14,20 @@ def pdf_to_json():
     return json_filepath
 
 
-def main():
-    pass
+def remove_blank_lines(md_filepath):
+    with open(md_filepath, 'r') as f:
+        lines = f.readlines()
+
+    cleaned_lines = [line for line in lines if line.strip()]
+    with open(md_filepath, 'w') as f:
+        f.writelines(cleaned_lines)
+    
+
+def main(pdf_filepath):
+    md_filepath = extract_pdf_to_md(pdf_filepath)
+    remove_blank_lines(md_filepath)
 
 
 if __name__ == "__main__":
-    main()
+    pdf_filepath = sys.argv[1]
+    main(pdf_filepath)
