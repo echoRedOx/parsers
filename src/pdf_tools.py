@@ -7,6 +7,8 @@ import pathlib
 def extract_pdf_to_txt(input_filepath):
     """
     This method is less effective than converting .pdf -> .md. Recommend using the extract_pdf_to_md() method first for cleaner results.
+    
+    :param input_filepath: str
     """
     doc = pymupdf.open(input_filepath)
     output_filepath = os.path.splitext(input_filepath)[0] + ".txt"

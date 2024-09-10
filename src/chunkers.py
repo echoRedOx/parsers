@@ -1,8 +1,10 @@
 from nltk import sent_tokenize, word_tokenize
 import json
+import sys
+import os
 
 
-def chunk_text(filepath: str, max_chunk_size: int, overlap_size: int, output_path: str) -> None:
+def chunk_sentences(filepath: str, chunk_size: int, overlap_size: int) -> None:
     """
     Do not use. Have not validated outputs.
 
@@ -11,6 +13,8 @@ def chunk_text(filepath: str, max_chunk_size: int, overlap_size: int, output_pat
     :param overlap_size: Overlap
     :param output_path: Filepath for json output.
     """
+    output_path = os.path.splitext(filepath)[0] + ".json"
+
     with open(filepath
     , 'r', encoding='utf-8') as file:
         text = file.read()
@@ -19,20 +23,21 @@ def chunk_text(filepath: str, max_chunk_size: int, overlap_size: int, output_pat
 
     chunks = []
     current_chunk = []
-    current_word_count = 0
+    chunk_counter = 0
 
-    for sentence in sentences:
+    for sentence in sentences[:1000]:
         tokenized_content = word_tokenize(sentence)
-        word_count = len(tokenized_content)
+        sent_counter = len(tokenized_content)
 
-        if current_word_count + word_count > max_chunk_size:
+        if chunk_counter + sent_counter > chunk_size:
             chunks.append(' '.join(current_chunk))
-            start_overlap = max(0, len(current_chunk) - overlap_size)
+            start_overlap = max(0, (chunk_counter - overlap_size))
             current_chunk = current_chunk[start_overlap:]
-            current_word_count = len(word_tokenize(' '.join(current_chunk)))
+            chunk_counter = overlap
 
         current_chunk.append(sentence)
-        current_word_count += word_count
+        chunk_counter += sent_counter
+        sent_counter = 0
 
     if current_chunk:
         chunks.append(' '.join(current_chunk))
@@ -43,9 +48,12 @@ def chunk_text(filepath: str, max_chunk_size: int, overlap_size: int, output_pat
     print(f"Saved chunks to {output_path}")
 
 
-def json_to_chunks(filepath):
-    with open(filepath, 'r') as f:
-        data = json.load(f)
+def main(filepath: str, chunk_size: int, overlap_size: int):
+    chunk_sentences(filepath, chunk_size, overlap_size)
     
-    print(data)
 
+if __name__ == "__main__":
+    source = sys.argv[1]
+    chunk_size = int(sys.argv[2])
+    overlap = int(sys.argv[3])
+    main(source, chunk_size, overlap)

@@ -1,6 +1,7 @@
 from src.pdf_tools import extract_pdf_to_md
 from src.txt_tools import split_text_to_sentences
 import sys
+from time import time
 
 
 def pdf_to_json():
@@ -30,4 +31,8 @@ def main(pdf_filepath):
 
 if __name__ == "__main__":
     pdf_filepath = sys.argv[1]
+    start = time()
     main(pdf_filepath)
+    end = time()
+    duration = end - start
+    print(f"Extraction completed in {duration} seconds.")
